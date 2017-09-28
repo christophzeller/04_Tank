@@ -18,9 +18,20 @@ class PANZERARENA_API ATankPlayerController : public APlayerController
 	
 public:
 	ATank* GetControlledTank() const;
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere)
+	float CrosshairXLocation = 0.5f;
+	
+	UPROPERTY(EditAnywhere)
+	float CrosshairYLocation = 0.3333f;
 
 protected:
 	virtual void BeginPlay() override;
-	
+
+private:
+	void AimAtAimpoint();
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const;
 	
 };
