@@ -33,5 +33,9 @@ private:
 	void AimAtAimpoint();
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const;
+	bool GetLookVectorHitLocation(FVector& OutHitLocation, const FVector& LookDirection) const;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 1000000.f;
 	
 };

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include <Engine/World.h>
 
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -54,6 +55,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	// get UI widget point
 	// convert point location from screen space to world space
 	// cast ray from tank through widget dot location
+	// LineTraceSingleByChannel
 	// check for intersection with stuff
 	// return
 
@@ -66,6 +68,11 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LookDirection: %s"), *(LookDirection.ToString()));
+		if (GetLookVectorHitLocation(OutHitLocation, LookDirection))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *(OutHitLocation.ToString()));
+			return true;
+		}
 		return false;
 	}
 
@@ -77,4 +84,23 @@ bool ATankPlayerController::GetLookDirection(const FVector2D& ScreenLocation, FV
 	FVector Location{};
 
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, Location, OutLookDirection);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector& OutHitLocation, const FVector& LookDirection) const
+{
+	FHitResult HitResult{};
+	FVector CameraLocation;
+
+	CameraLocation = PlayerCameraManager->GetCameraLocation();
+
+	bool hasHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult, 
+		CameraLocation, 
+		CameraLocation + LookDirection * LineTraceRange, 
+		ECollisionChannel::ECC_Visibility
+	);
+	
+	OutHitLocation = HitResult.Location;
+
+	return hasHit;
 }
