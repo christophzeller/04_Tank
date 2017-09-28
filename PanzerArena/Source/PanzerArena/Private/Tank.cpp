@@ -29,6 +29,10 @@ void ATank::Tick(float DeltaTime)
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
+void ATank::AimAt(FVector TargetLocation)
+{
+	auto ThisTankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *ThisTankName, *(TargetLocation.ToString()));
+}

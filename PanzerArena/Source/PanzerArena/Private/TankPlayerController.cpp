@@ -46,7 +46,7 @@ void ATankPlayerController::AimAtAimpoint()
 
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		// rotate turret there
+		GetControlledTank()->AimAt(HitLocation);
 	}
 }
 
@@ -67,10 +67,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	FVector LookDirection{};
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("LookDirection: %s"), *(LookDirection.ToString()));
 		if (GetLookVectorHitLocation(OutHitLocation, LookDirection))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *(OutHitLocation.ToString()));
 			return true;
 		}
 		return false;
