@@ -4,6 +4,7 @@
 #include <TankBarrelComponent.h>
 #include <TankTurretComponent.h>
 #include <TankAimingComponent.h>
+#include <Engine/World.h>
 
 // Sets default values
 ATank::ATank()
@@ -18,7 +19,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called to bind functionality to input
@@ -42,4 +42,9 @@ void ATank::SetBarrelReference(UTankBarrelComponent* Barrel)
 void ATank::SetTurretReference(UTankTurretComponent* Turret)
 {
 	TankAimingComponent->SetTurretReference(Turret);
+}
+
+void ATank::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%f BOOM"), GetWorld()->GetTimeSeconds());
 }

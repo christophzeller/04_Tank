@@ -68,7 +68,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 		auto TankName = GetOwner()->GetName();
 
 		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s at %f"), *(GetOwner()->GetName()), *(TargetLocation.ToString()), *(BarrelLocation.ToString()), LaunchSpeed);
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *(TankName), *(AimDirection.ToString()));
+		//UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *(TankName), *(AimDirection.ToString()));
 
 		MoveBarrel(AimDirection);
 		MoveTurret(AimDirection);
