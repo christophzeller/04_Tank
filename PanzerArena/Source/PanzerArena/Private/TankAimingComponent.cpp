@@ -6,6 +6,7 @@
 #include <Engine/World.h>
 
 #include <TankBarrelComponent.h>
+#include <Components/StaticMeshComponent.h>
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -54,6 +55,9 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 		BarrelLocation,
 		TargetLocation,
 		LaunchSpeed,
+		false,
+		0.f,
+		0.f,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 
@@ -88,7 +92,7 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection, float DeltaTi
 
 	auto DeltaRotator = AimRotator - BarrelRotator;
 
-	Barrel->Elevate(5.f);
+	Barrel->Elevate(DeltaRotator.Pitch);
 	UE_LOG(LogTemp, Warning, TEXT("DeltaRotator: %s "), *(DeltaRotator.ToString()));
 
 	// takes target vector

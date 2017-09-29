@@ -15,11 +15,12 @@ class PANZERARENA_API UTankBarrelComponent : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 public:
-	void Elevate(float DegreesPerSecond);
+	// [-1, +1]
+	void Elevate(float RelativeSpeed);
 	
 private:
 	UPROPERTY(EditAnywhere, Category=Setup)
-	float MaxDegreesPerSecond = 20.f;
+	float MaxDegreesPerSecond = 5.f;
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 	float MaxElevationDegrees = 15.0f;
