@@ -63,7 +63,7 @@ void ATank::Fire()
 
 	if (Shell)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%f BOOM %s"), GetWorld()->GetTimeSeconds(), *Shell->GetName());
+		Shell->Launch(LaunchSpeed);
 	}
 	else
 	{
