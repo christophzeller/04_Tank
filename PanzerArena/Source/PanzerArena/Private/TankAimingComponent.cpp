@@ -6,7 +6,7 @@
 #include <Engine/World.h>
 
 #include <TankBarrelComponent.h>
-#include <Components/StaticMeshComponent.h>
+#include <TankTurretComponent.h>
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -40,7 +40,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpeed)
 {
-	if (!Barrel)
+	if (!Barrel || !Turret)
 	{
 		return;
 	}
@@ -70,7 +70,8 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s at %f"), *(GetOwner()->GetName()), *(TargetLocation.ToString()), *(BarrelLocation.ToString()), LaunchSpeed);
 		UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *(TankName), *(AimDirection.ToString()));
 
-		MoveBarrel(AimDirection, GetWorld()->GetDeltaSeconds());
+		MoveBarrel(AimDirection);
+		MoveTurret(AimDirection);
 	}
 
 }
@@ -80,12 +81,12 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrelComponent* Barrel)
 	this->Barrel = Barrel;
 }
 
-void UTankAimingComponent::SetTurretReference(UStaticMeshComponent* Turret)
+void UTankAimingComponent::SetTurretReference(UTankTurretComponent* Turret)
 {
 	this->Turret = Turret;
 }
 
-void UTankAimingComponent::MoveBarrel(const FVector& AimDirection, float DeltaTime)
+void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
 {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
@@ -93,11 +94,21 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection, float DeltaTi
 	auto DeltaRotator = AimRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
-	UE_LOG(LogTemp, Warning, TEXT("DeltaRotator: %s "), *(DeltaRotator.ToString()));
+	//UE_LOG(LogTemp, Warning, TEXT("DeltaRotator: %s "), *(DeltaRotator.ToString()));
 
 	// takes target vector
 	// rotates the turret on the xy plane until desired azimuth is achieved
 	// rotates the barrel around the x axis until desired elevation is achieved
 	// 
 
+}
+
+void UTankAimingComponent::MoveTurret(const FVector& AimDirection)
+{
+	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	auto AimRotator = AimDirection.Rotation();
+
+	auto DeltaRotator = AimRotator - TurretRotator;
+
+	Turret->Rotate(DeltaRotator.Yaw);
 }

@@ -7,6 +7,7 @@
 
 #include "Tank.generated.h"
 class UTankBarrelComponent;
+class UTankTurretComponent;
 class UTankAimingComponent;
 
 UCLASS()
@@ -25,6 +26,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurretComponent* Barrel);
 
 protected:
 	// Called when the game starts or when spawned

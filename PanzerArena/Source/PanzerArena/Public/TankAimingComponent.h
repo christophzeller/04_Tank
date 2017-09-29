@@ -8,8 +8,7 @@
 #include "TankAimingComponent.generated.h"
 
 class UTankBarrelComponent;
-class UStaticMeshComponent;
-
+class UTankTurretComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PANZERARENA_API UTankAimingComponent : public UActorComponent
@@ -21,12 +20,13 @@ public:
 	UTankAimingComponent();
 
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
-	void SetTurretReference(UStaticMeshComponent* Turret);
+	void SetTurretReference(UTankTurretComponent* Turret);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	void MoveBarrel(const FVector& AimDirection, float DeltaTime);
+	void MoveBarrel(const FVector& AimDirection);
+	void MoveTurret(const FVector& AimDirection);
 
 public:	
 	// Called every frame
@@ -36,6 +36,6 @@ public:
 
 private:
 	UTankBarrelComponent* Barrel = nullptr;
-	UStaticMeshComponent* Turret = nullptr;
+	UTankTurretComponent* Turret = nullptr;
 	
 };
