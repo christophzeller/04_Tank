@@ -7,6 +7,8 @@
 #include <Components/StaticMeshComponent.h>
 #include "TankAimingComponent.generated.h"
 
+class UTankBarrelComponent;
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PANZERARENA_API UTankAimingComponent : public UActorComponent
@@ -17,7 +19,7 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void SetBarrelReference(UStaticMeshComponent* Barrel);
+	void SetBarrelReference(UTankBarrelComponent* Barrel);
 	void SetTurretReference(UStaticMeshComponent* Turret);
 
 protected:
@@ -32,7 +34,7 @@ public:
 	virtual void AimAt(const FVector& TargetLocation, float LaunchSpeed);
 
 private:
-	UStaticMeshComponent* Barrel = nullptr;
+	UTankBarrelComponent* Barrel = nullptr;
 	UStaticMeshComponent* Turret = nullptr;
 	
 };
