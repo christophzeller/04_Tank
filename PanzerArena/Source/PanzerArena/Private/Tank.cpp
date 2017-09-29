@@ -5,6 +5,8 @@
 #include <TankTurretComponent.h>
 #include <TankAimingComponent.h>
 #include <Engine/World.h>
+#include <Engine/StaticMeshSocket.h>
+#include <Shell.h>
 
 // Sets default values
 ATank::ATank()
@@ -37,6 +39,7 @@ void ATank::AimAt(FVector TargetLocation)
 void ATank::SetBarrelReference(UTankBarrelComponent* Barrel)
 {
 	TankAimingComponent->SetBarrelReference(Barrel);
+	this->Barrel = Barrel;
 }
 
 void ATank::SetTurretReference(UTankTurretComponent* Turret)
@@ -46,5 +49,24 @@ void ATank::SetTurretReference(UTankTurretComponent* Turret)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f BOOM"), GetWorld()->GetTimeSeconds());
+	if (!Barrel)
+	{
+		return;
+	}
+
+	// spawn projectile at muzzle socket
+	auto Shell = GetWorld()->SpawnActor<AShell>(
+		ShellBlueprint, 
+		Barrel->GetSocketLocation(FName("Muzzle")), 
+		Barrel->GetSocketRotation(FName("Muzzle"))
+		);
+
+	if (Shell)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f BOOM %s"), GetWorld()->GetTimeSeconds(), *Shell->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
+	}
 }

@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Templates/SubclassOf.h"
 
 #include "Tank.generated.h"
 class UTankBarrelComponent;
 class UTankTurretComponent;
 class UTankAimingComponent;
+class AShell;
 
 UCLASS()
 class PANZERARENA_API ATank : public APawn
@@ -42,5 +44,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 100000.f;
 	
-	
+	// used to spawn shells
+	UPROPERTY(EditAnywhere, Category = Setup)
+	TSubclassOf<AShell> ShellBlueprint;
+
+	UTankBarrelComponent* Barrel = nullptr;
 };
