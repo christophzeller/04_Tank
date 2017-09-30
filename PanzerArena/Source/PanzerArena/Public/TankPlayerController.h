@@ -20,10 +20,10 @@ public:
 	ATank* GetControlledTank() const;
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5f;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairYLocation = 0.3333f;
 
 protected:
@@ -35,7 +35,7 @@ private:
 	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const;
 	bool GetLookVectorHitLocation(FVector& OutHitLocation, const FVector& LookDirection) const;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.f;
 	
 };

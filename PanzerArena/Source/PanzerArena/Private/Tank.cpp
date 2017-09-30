@@ -49,24 +49,26 @@ void ATank::SetTurretReference(UTankTurretComponent* Turret)
 
 void ATank::Fire()
 {
-	if (!Barrel)
-	{
-		return;
-	}
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
 
-	// spawn projectile at muzzle socket
-	auto Shell = GetWorld()->SpawnActor<AShell>(
-		ShellBlueprint, 
-		Barrel->GetSocketLocation(FName("Muzzle")), 
-		Barrel->GetSocketRotation(FName("Muzzle"))
-		);
+	if (Barrel && isReloaded)
+	{
+		// spawn projectile at muzzle socket
+		auto Shell = GetWorld()->SpawnActor<AShell>(
+			ShellBlueprint,
+			Barrel->GetSocketLocation(FName("Muzzle")),
+			Barrel->GetSocketRotation(FName("Muzzle"))
+			);
 
-	if (Shell)
-	{
-		Shell->Launch(LaunchSpeed);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
+		LastFireTime = FPlatformTime::Seconds();
+
+		if (Shell)
+		{
+			Shell->Launch(LaunchSpeed);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
+		}
 	}
 }

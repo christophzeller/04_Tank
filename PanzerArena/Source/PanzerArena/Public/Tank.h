@@ -29,7 +29,7 @@ public:
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurretComponent* Barrel);
+	void SetTurretReference(UTankTurretComponent* Turret);
 
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void Fire();
@@ -41,7 +41,12 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
-	UPROPERTY(EditAnywhere, Category = Firing)
+	double LastFireTime = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTime = 3.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 100000.f;
 	
 	// used to spawn shells
