@@ -20,6 +20,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 private:
+	//UPROPERTY(BlueprintAssignable)
+	float StandOffDistance = 3000.f;
 	ATank* ControlledTank;
 	ATank* PlayerTank;
 

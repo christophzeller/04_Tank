@@ -28,7 +28,7 @@ void AShell::Tick(float DeltaTime)
 
 void AShell::Launch(float Speed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f BOOM %f"), GetWorld()->GetTimeSeconds(), Speed);
+	//UE_LOG(LogTemp, Warning, TEXT("%f BOOM %f"), GetWorld()->GetTimeSeconds(), Speed);
 	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	ProjectileMovementComponent->Activate();
 }

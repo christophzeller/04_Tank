@@ -5,17 +5,16 @@
 
 void UTankNavMovementComponent::Initialize(UTankTrackComponent* LeftTrack, UTankTrackComponent* RightTrack)
 {
-	if (!LeftTrack || !RightTrack)
-	{
-		return;
-	}
-
 	this->LeftTrack = LeftTrack;
 	this->RightTrack = RightTrack;
 }
 
 void UTankNavMovementComponent::IntendMoveForward(float Throttle)
 {
+	if (!LeftTrack || !RightTrack)
+	{
+		return;
+	}
 	FMath::Clamp(Throttle, -1.f, 1.f);
 	LeftTrack->SetThrottle(Throttle);
 	RightTrack->SetThrottle(Throttle);
@@ -24,8 +23,26 @@ void UTankNavMovementComponent::IntendMoveForward(float Throttle)
 
 void UTankNavMovementComponent::IntendTurn(float Throttle)
 {
-	UE_LOG(LogTemp, Warning, TEXT("IntendTurn: %f"), Throttle);
+	if (!LeftTrack || !RightTrack)
+	{
+		return;
+	}
 	FMath::Clamp(Throttle, -1.f, 1.f);
 	LeftTrack->SetThrottle(Throttle);
 	RightTrack->SetThrottle(-Throttle);
+}
+
+void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	//Super::RequestDirectMove(MoveVelocity, bForceMaxSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("%s moving to %s"), *GetOwner()->GetName(), *MoveVelocity.ToString());
+
+	auto NewForward = MoveVelocity.GetSafeNormal();
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	
+	auto ForwardThrottle = FVector::DotProduct(TankForward, NewForward);
+	auto TurnThrottle = FVector::CrossProduct(TankForward, NewForward).Z;
+
+	IntendMoveForward(ForwardThrottle);
+	IntendTurn(TurnThrottle);
 }

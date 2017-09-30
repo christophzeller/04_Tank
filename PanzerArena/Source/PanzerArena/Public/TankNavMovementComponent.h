@@ -26,7 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void IntendTurn(float Throttle);
 
-	void SetTrackReferences(UTankTrackComponent* LeftTrack, UTankTrackComponent* RightTrack);
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
+	//void SetTrackReferences(UTankTrackComponent* LeftTrack, UTankTrackComponent* RightTrack);
 	
 private:
 	UTankTrackComponent* LeftTrack = nullptr;
