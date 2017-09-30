@@ -10,6 +10,7 @@
 class UTankBarrelComponent;
 class UTankTurretComponent;
 class UTankAimingComponent;
+class UTankNavMovementComponent;
 class AShell;
 
 UCLASS()
@@ -39,6 +40,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadonly, Category = Setup)
+	UTankNavMovementComponent* TankMovementComponent = nullptr;
 
 private:
 	double LastFireTime = 0.f;
