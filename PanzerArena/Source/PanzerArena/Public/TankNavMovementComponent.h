@@ -17,18 +17,17 @@ class PANZERARENA_API UTankNavMovementComponent : public UNavMovementComponent
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void Initialize(UTankTrackComponent* LeftTrack, UTankTrackComponent* RightTrack);
 	//
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendMoveForward(float Throttle);
 
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendTurn(float Throttle);
 
+protected:
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
-
-	//void SetTrackReferences(UTankTrackComponent* LeftTrack, UTankTrackComponent* RightTrack);
 	
 private:
 	UTankTrackComponent* LeftTrack = nullptr;

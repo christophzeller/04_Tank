@@ -7,6 +7,14 @@
 
 #include "TankAimingComponent.generated.h"
 
+UENUM()
+enum class EFiringState : uint8
+{
+	Reloading, 
+	Aiming, 
+	Locked
+};
+
 class UTankBarrelComponent;
 class UTankTurretComponent;
 
@@ -28,6 +36,9 @@ protected:
 	void MoveBarrel(const FVector& AimDirection);
 	void MoveTurret(const FVector& AimDirection);
 
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringState FiringState = EFiringState::Reloading;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -37,5 +48,7 @@ public:
 private:
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
+
+	
 	
 };
