@@ -58,15 +58,11 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 		0.f,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-
 	
 	if (bHasFiringSolution)
 	{
 		auto AimDirection = ShellVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
-
-		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s at %f"), *(GetOwner()->GetName()), *(TargetLocation.ToString()), *(BarrelLocation.ToString()), LaunchSpeed);
-		//UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *(TankName), *(AimDirection.ToString()));
 
 		MoveBarrel(AimDirection);
 		MoveTurret(AimDirection);
@@ -98,7 +94,6 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
 	// rotates the turret on the xy plane until desired azimuth is achieved
 	// rotates the barrel around the x axis until desired elevation is achieved
 	// 
-
 }
 
 void UTankAimingComponent::MoveTurret(const FVector& AimDirection)

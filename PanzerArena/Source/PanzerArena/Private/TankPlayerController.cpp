@@ -38,7 +38,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimAtAimpoint()
 {
-	if (GetControlledTank()) { return;  }
+	if (!GetControlledTank()) { return;  }
 
 	FVector HitLocation {};
 
