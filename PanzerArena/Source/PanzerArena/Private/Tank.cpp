@@ -23,30 +23,3 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
-void ATank::Fire()
-{
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
-	Barrel = FindComponentByClass<UTankBarrelComponent>();
-
-	if (ensure(Barrel) && isReloaded)
-	{
-		// spawn projectile at muzzle socket
-		auto Shell = GetWorld()->SpawnActor<AShell>(
-			ShellBlueprint,
-			Barrel->GetSocketLocation(FName("Muzzle")),
-			Barrel->GetSocketRotation(FName("Muzzle"))
-			);
-
-		LastFireTime = FPlatformTime::Seconds();
-
-		if (ensure(Shell))
-		{
-			//Shell->Launch(LaunchSpeed);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
-		}
-	}
-}

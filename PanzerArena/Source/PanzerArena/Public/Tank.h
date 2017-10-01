@@ -22,21 +22,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void Fire();
-
 protected:
 	virtual void BeginPlay() override;
-
-private:
-	double LastFireTime = 0.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float ReloadTime = 3.f;
-	
-	// used to spawn shells
-	UPROPERTY(EditAnywhere, Category = "Setup")
-	TSubclassOf<AShell> ShellBlueprint;
-
-	UTankBarrelComponent* Barrel = nullptr;
 };

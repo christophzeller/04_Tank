@@ -3,10 +3,13 @@
 #include "TankAimingComponent.h"
 #include <GameFramework/Actor.h>
 #include <Kismet/GameplayStatics.h>
+
+#include <Engine/StaticMeshSocket.h>
 #include <Engine/World.h>
 
 #include <TankBarrelComponent.h>
 #include <TankTurretComponent.h>
+#include <Shell.h>
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -111,4 +114,30 @@ void UTankAimingComponent::Initialize(UTankBarrelComponent* Barrel, UTankTurretC
 {
 	SetBarrelReference(Barrel);
 	SetTurretReference(Turret);
+}
+
+void UTankAimingComponent::Fire()
+{
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+
+	if (ensure(Barrel) && isReloaded)
+	{
+		// spawn projectile at muzzle socket
+		auto Shell = GetWorld()->SpawnActor<AShell>(
+			ShellBlueprint,
+			Barrel->GetSocketLocation(FName("Muzzle")),
+			Barrel->GetSocketRotation(FName("Muzzle"))
+			);
+
+		LastFireTime = FPlatformTime::Seconds();
+
+		if (ensure(Shell))
+		{
+			Shell->Launch(LaunchSpeed);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
+		}
+	}
 }

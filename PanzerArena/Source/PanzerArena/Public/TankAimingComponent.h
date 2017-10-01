@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Templates/SubclassOf.h"
 
 #include "TankAimingComponent.generated.h"
 
@@ -17,6 +18,7 @@ enum class EFiringState : uint8
 
 class UTankBarrelComponent;
 class UTankTurretComponent;
+class AShell;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PANZERARENA_API UTankAimingComponent : public UActorComponent
@@ -26,6 +28,12 @@ class PANZERARENA_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+	
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	
+	virtual void AimAt(const FVector& TargetLocation);
 
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
 	void SetTurretReference(UTankTurretComponent* Turret);
@@ -33,6 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Initialize(UTankBarrelComponent* Barrel, UTankTurretComponent* Turret);
 
+	UFUNCTION(BlueprintCallable)
 	void Fire();
 
 protected:
@@ -44,11 +53,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	virtual void AimAt(const FVector& TargetLocation);
 
 private:
 	UTankBarrelComponent* Barrel = nullptr;
@@ -56,5 +60,13 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 8000.f;
-	
+
+	double LastFireTime = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float ReloadTime = 3.f;
+
+	// used to spawn shells
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		TSubclassOf<AShell> ShellBlueprint;
 };
