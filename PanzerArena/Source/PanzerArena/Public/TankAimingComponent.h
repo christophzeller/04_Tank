@@ -55,6 +55,8 @@ protected:
 
 
 private:
+	bool IsBarrelMoving() const;
+
 	UTankBarrelComponent* Barrel = nullptr;
 	UTankTurretComponent* Turret = nullptr;
 
@@ -69,4 +71,8 @@ private:
 	// used to spawn shells
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		TSubclassOf<AShell> ShellBlueprint;
+
+	FVector AimDirection;
+
+	
 };

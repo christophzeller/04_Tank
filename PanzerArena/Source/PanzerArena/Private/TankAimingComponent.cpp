@@ -25,8 +25,7 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	// ...
-	
+	LastFireTime = FPlatformTime::Seconds();
 }
 
 
@@ -34,8 +33,23 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+	if (!isReloaded)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("IsBarrelMoving(): %s"), IsBarrelMoving() ? TEXT("TRUE") : TEXT("FALSE"));
+		if (IsBarrelMoving())
+		{
+			FiringState = EFiringState::Aiming;
+		}
+		else
+		{
+			FiringState = EFiringState::Locked;
+		}
+	}
 	
 }
 
@@ -64,7 +78,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation)
 	
 	if (bHasFiringSolution)
 	{
-		auto AimDirection = ShellVelocity.GetSafeNormal();
+		AimDirection = ShellVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
 
 		MoveBarrel(AimDirection);
@@ -118,9 +132,12 @@ void UTankAimingComponent::Initialize(UTankBarrelComponent* Barrel, UTankTurretC
 
 void UTankAimingComponent::Fire()
 {
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+	if (!ensure(Barrel))
+	{
+		return;
+	}
 
-	if (ensure(Barrel) && isReloaded)
+	if (FiringState != EFiringState::Reloading)
 	{
 		// spawn projectile at muzzle socket
 		auto Shell = GetWorld()->SpawnActor<AShell>(
@@ -140,4 +157,16 @@ void UTankAimingComponent::Fire()
 			UE_LOG(LogTemp, Warning, TEXT("%f failed to spawn BOOM :("), GetWorld()->GetTimeSeconds());
 		}
 	}
+}
+
+bool UTankAimingComponent::IsBarrelMoving() const
+{
+	if (!ensure(Barrel))
+	{
+		return false;
+	}
+
+	auto BarrelForward = Barrel->GetForwardVector().GetSafeNormal();
+
+	return !BarrelForward.Equals(AimDirection, 0.01f);
 }

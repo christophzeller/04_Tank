@@ -33,7 +33,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimAtAimpoint()
 {
-	if (!GetPawn()) { return;  }
+	if (!GetPawn()) { return; }
 
 	FVector HitLocation {};
 	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();

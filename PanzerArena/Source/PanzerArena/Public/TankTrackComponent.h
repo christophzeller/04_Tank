@@ -15,11 +15,15 @@ class PANZERARENA_API UTankTrackComponent : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 public:
+	UTankTrackComponent();
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetThrottle(float Throttle);
 
 protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float MaxDrivingForce = 500000.f;
+	float MaxDrivingForce = 50000000.f;
 };
