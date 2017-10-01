@@ -6,7 +6,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -22,8 +22,7 @@ public:
 private:
 	//UPROPERTY(BlueprintAssignable)
 	float StandOffDistance = 3000.f;
-	ATank* ControlledTank;
-	ATank* PlayerTank;
+	UTankAimingComponent* AimingComponent = nullptr;
 
 protected:
 	virtual void BeginPlay() override;

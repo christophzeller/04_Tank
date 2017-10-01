@@ -6,7 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
 class UTankAimingComponent;
 
 /**
@@ -19,7 +18,6 @@ class PANZERARENA_API ATankPlayerController : public APlayerController
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;
 
 	virtual void Tick(float DeltaTime) override;
 
@@ -32,6 +30,7 @@ public:
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+	UTankAimingComponent* AimingComponent = nullptr;
 
 	virtual void BeginPlay() override;
 

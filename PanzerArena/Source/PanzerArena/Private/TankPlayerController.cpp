@@ -5,24 +5,19 @@
 #include <Tank.h>
 #include <TankAimingComponent.h>
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
 	PrimaryActorTick.bCanEverTick = true;
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent))
 	{
 		FoundAimingComponent(AimingComponent);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("No AimingComponent found on %s"), *GetControlledTank()->GetName());
+		UE_LOG(LogTemp, Error, TEXT("No AimingComponent found on %s"), *GetPawn()->GetName());
 	}
 }
 
@@ -38,13 +33,19 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimAtAimpoint()
 {
-	if (!GetControlledTank()) { return;  }
+	if (!GetPawn()) { return;  }
 
 	FVector HitLocation {};
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+
+	if (!ensure(AimingComponent)) 
+	{
+		return;
+	}
 
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 	}
 }
 

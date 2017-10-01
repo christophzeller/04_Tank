@@ -8,7 +8,6 @@
 
 #include "Tank.generated.h"
 class UTankBarrelComponent;
-class UTankAimingComponent;
 class AShell;
 
 UCLASS()
@@ -19,7 +18,6 @@ class PANZERARENA_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-	void AimAt(FVector TargetLocation);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -30,17 +28,11 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadonly, Category = "Setup")
-	UTankAimingComponent* TankAimingComponent = nullptr;
-
 private:
 	double LastFireTime = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 100000.f;
 	
 	// used to spawn shells
 	UPROPERTY(EditAnywhere, Category = "Setup")

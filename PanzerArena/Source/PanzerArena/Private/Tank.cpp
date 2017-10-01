@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include <TankBarrelComponent.h>
-#include <TankAimingComponent.h>
 #include <Engine/World.h>
 #include <Engine/StaticMeshSocket.h>
 #include <Shell.h>
@@ -25,16 +24,10 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ATank::AimAt(FVector TargetLocation)
-{
-	if (ensure(TankAimingComponent))
-		TankAimingComponent->AimAt(TargetLocation, LaunchSpeed);
-
-}
-
 void ATank::Fire()
 {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+	Barrel = FindComponentByClass<UTankBarrelComponent>();
 
 	if (ensure(Barrel) && isReloaded)
 	{
@@ -49,7 +42,7 @@ void ATank::Fire()
 
 		if (ensure(Shell))
 		{
-			Shell->Launch(LaunchSpeed);
+			//Shell->Launch(LaunchSpeed);
 		}
 		else
 		{
