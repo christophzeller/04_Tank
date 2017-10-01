@@ -3,6 +3,7 @@
 #include "TankPlayerController.h"
 #include <Engine/World.h>
 #include <Tank.h>
+#include <TankAimingComponent.h>
 
 ATank* ATankPlayerController::GetControlledTank() const
 {
@@ -14,8 +15,15 @@ void ATankPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	PrimaryActorTick.bCanEverTick = true;
-
-	auto Tank = GetControlledTank();
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent))
+	{
+		FoundAimingComponent(AimingComponent);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No AimingComponent found on %s"), *GetControlledTank()->GetName());
+	}
 }
 
 // Called every frame
@@ -30,7 +38,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimAtAimpoint()
 {
-	if (!GetControlledTank()) { return;  }
+	if (GetControlledTank()) { return;  }
 
 	FVector HitLocation {};
 

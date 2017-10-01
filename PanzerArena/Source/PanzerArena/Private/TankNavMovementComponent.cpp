@@ -11,7 +11,7 @@ void UTankNavMovementComponent::Initialize(UTankTrackComponent* LeftTrack, UTank
 
 void UTankNavMovementComponent::IntendMoveForward(float Throttle)
 {
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		return;
 	}
@@ -23,7 +23,7 @@ void UTankNavMovementComponent::IntendMoveForward(float Throttle)
 
 void UTankNavMovementComponent::IntendTurn(float Throttle)
 {
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		return;
 	}

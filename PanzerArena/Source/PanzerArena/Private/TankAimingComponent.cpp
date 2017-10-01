@@ -14,7 +14,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 	// ...
 }
 
@@ -23,7 +22,6 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	
 }
@@ -40,7 +38,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpeed)
 {
-	if (!Barrel || !Turret)
+	if (!ensure(Barrel && Turret))
 	{
 		return;
 	}
@@ -111,4 +109,11 @@ void UTankAimingComponent::MoveTurret(const FVector& AimDirection)
 	auto DeltaRotator = AimRotator - TurretRotator;
 
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+
+void UTankAimingComponent::Initialize(UTankBarrelComponent* Barrel, UTankTurretComponent* Turret)
+{
+	SetBarrelReference(Barrel);
+	SetTurretReference(Turret);
 }

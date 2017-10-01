@@ -14,11 +14,8 @@ ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("AimingComponent"));
 }
 
-// Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,27 +29,16 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::AimAt(FVector TargetLocation)
 {
-	TankAimingComponent->AimAt(TargetLocation, LaunchSpeed);
-	//auto ThisTankName = GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *ThisTankName, *(TargetLocation.ToString()));
-}
+	if (ensure(TankAimingComponent))
+		TankAimingComponent->AimAt(TargetLocation, LaunchSpeed);
 
-void ATank::SetBarrelReference(UTankBarrelComponent* Barrel)
-{
-	TankAimingComponent->SetBarrelReference(Barrel);
-	this->Barrel = Barrel;
-}
-
-void ATank::SetTurretReference(UTankTurretComponent* Turret)
-{
-	TankAimingComponent->SetTurretReference(Turret);
 }
 
 void ATank::Fire()
 {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
 
-	if (Barrel && isReloaded)
+	if (ensure(Barrel) && isReloaded)
 	{
 		// spawn projectile at muzzle socket
 		auto Shell = GetWorld()->SpawnActor<AShell>(
@@ -63,7 +49,7 @@ void ATank::Fire()
 
 		LastFireTime = FPlatformTime::Seconds();
 
-		if (Shell)
+		if (ensure(Shell))
 		{
 			Shell->Launch(LaunchSpeed);
 		}

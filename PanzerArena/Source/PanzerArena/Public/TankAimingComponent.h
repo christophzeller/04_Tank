@@ -30,6 +30,11 @@ public:
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
 	void SetTurretReference(UTankTurretComponent* Turret);
 
+	UFUNCTION(BlueprintCallable)
+	void Initialize(UTankBarrelComponent* Barrel, UTankTurretComponent* Turret);
+
+	void Fire();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
