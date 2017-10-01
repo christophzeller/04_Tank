@@ -2,9 +2,7 @@
 
 #include "Tank.h"
 #include <TankBarrelComponent.h>
-#include <TankTurretComponent.h>
 #include <TankAimingComponent.h>
-#include <TankNavMovementComponent.h>
 #include <Engine/World.h>
 #include <Engine/StaticMeshSocket.h>
 #include <Shell.h>

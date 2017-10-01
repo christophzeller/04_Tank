@@ -8,9 +8,7 @@
 
 #include "Tank.generated.h"
 class UTankBarrelComponent;
-class UTankTurretComponent;
 class UTankAimingComponent;
-class UTankNavMovementComponent;
 class AShell;
 
 UCLASS()
@@ -34,9 +32,6 @@ protected:
 
 	UPROPERTY(BlueprintReadonly, Category = "Setup")
 	UTankAimingComponent* TankAimingComponent = nullptr;
-
-	UPROPERTY(BlueprintReadonly, Category = "Setup")
-	UTankNavMovementComponent* TankMovementComponent = nullptr;
 
 private:
 	double LastFireTime = 0.f;
