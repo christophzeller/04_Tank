@@ -34,21 +34,28 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
-	if (!isReloaded)
+	if (AmmoCounter > 0)
 	{
-		FiringState = EFiringState::Reloading;
-	}
-	else
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("IsBarrelMoving(): %s"), IsBarrelMoving() ? TEXT("TRUE") : TEXT("FALSE"));
-		if (IsBarrelMoving())
+		if (!isReloaded)
 		{
-			FiringState = EFiringState::Aiming;
+			FiringState = EFiringState::Reloading;
 		}
 		else
 		{
-			FiringState = EFiringState::Locked;
+			//UE_LOG(LogTemp, Warning, TEXT("IsBarrelMoving(): %s"), IsBarrelMoving() ? TEXT("TRUE") : TEXT("FALSE"));
+			if (IsBarrelMoving())
+			{
+				FiringState = EFiringState::Aiming;
+			}
+			else
+			{
+				FiringState = EFiringState::Locked;
+			}
 		}
+	}
+	else
+	{
+		FiringState = EFiringState::Empty;
 	}
 	
 }
@@ -118,7 +125,12 @@ void UTankAimingComponent::MoveTurret(const FVector& AimDirection)
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 
+	// prevent reversing turn direction near 180°
 	auto DeltaRotator = AimRotator - TurretRotator;
+	if (FMath::Abs(DeltaRotator.Yaw) > 180.f)
+	{
+		DeltaRotator.Yaw *= -1.f;
+	}
 
 	Turret->Rotate(DeltaRotator.Yaw);
 }
@@ -137,7 +149,7 @@ void UTankAimingComponent::Fire()
 		return;
 	}
 
-	if (FiringState != EFiringState::Reloading)
+	if (FiringState != EFiringState::Reloading && (AmmoCounter > 0))
 	{
 		// spawn projectile at muzzle socket
 		auto Shell = GetWorld()->SpawnActor<AShell>(
@@ -151,6 +163,7 @@ void UTankAimingComponent::Fire()
 		if (ensure(Shell))
 		{
 			Shell->Launch(LaunchSpeed);
+			--AmmoCounter;
 		}
 		else
 		{

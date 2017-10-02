@@ -6,6 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankTrackComponent.generated.h"
 
+class UPrimitiveComponent;
+class AActor;
+
 /**
  * 
  */
@@ -17,13 +20,22 @@ class PANZERARENA_API UTankTrackComponent : public UStaticMeshComponent
 public:
 	UTankTrackComponent();
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void BeginPlay();
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetThrottle(float Throttle);
 
 protected:
 private:
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void DriveTrack();
+	void NeutralizeSlippage();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float MaxDrivingForce = 50000000.f;
+
+	float CurrentThrottle = 0.f;
+	
 };

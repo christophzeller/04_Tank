@@ -19,12 +19,12 @@ class PANZERARENA_API ATankAIController : public AAIController
 public:
 	virtual void Tick(float DeltaTime) override;
 	
-private:
-	//UPROPERTY(BlueprintAssignable)
-	float StandOffDistance = 3000.f;
-	UTankAimingComponent* AimingComponent = nullptr;
-
 protected:
 	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float StandOffDistance = 6500.f;
+	UTankAimingComponent* AimingComponent = nullptr;
+
+
 	
 };

@@ -13,7 +13,8 @@ enum class EFiringState : uint8
 {
 	Reloading, 
 	Aiming, 
-	Locked
+	Locked,
+	Empty
 };
 
 class UTankBarrelComponent;
@@ -31,14 +32,18 @@ public:
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
+	inline EFiringState GetFiringState() const { return FiringState; }
 	
 	virtual void AimAt(const FVector& TargetLocation);
 
 	void SetBarrelReference(UTankBarrelComponent* Barrel);
 	void SetTurretReference(UTankTurretComponent* Turret);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	inline int32 GetAmmoCounter() const { return AmmoCounter; }
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Initialize(UTankBarrelComponent* Barrel, UTankTurretComponent* Turret);
 
 	UFUNCTION(BlueprintCallable)
@@ -53,6 +58,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 AmmoCounter = 25;
+
 
 private:
 	bool IsBarrelMoving() const;
@@ -66,11 +74,11 @@ private:
 	double LastFireTime = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float ReloadTime = 3.f;
+	float ReloadTime = 3.f;
 
 	// used to spawn shells
 	UPROPERTY(EditAnywhere, Category = "Setup")
-		TSubclassOf<AShell> ShellBlueprint;
+	TSubclassOf<AShell> ShellBlueprint;
 
 	FVector AimDirection;
 
